@@ -8,10 +8,6 @@ import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.templates.commands.JoystickDrive;
 
 
-
-
-
-
 /**
  *
  */
@@ -30,9 +26,12 @@ public static DriveTrain getInstance(){
 }
  
 private DriveTrain(){
-    drive = new RobotDrive(new Jaguar(RobotMap.LeftFront), new Jaguar(RobotMap.RightFront), 
-                                    new Jaguar(RobotMap.LeftBack), new Jaguar(RobotMap.RightBack));
+    drive = new RobotDrive(new Jaguar(RobotMap.LeftFront), new Jaguar(RobotMap.LeftBack), 
+                                    new Jaguar(RobotMap.RightFront), new Jaguar(RobotMap.RightBack));
+    drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+    drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
 }
+
 public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
@@ -47,6 +46,12 @@ public void drive(double LeftSpeed, double RightSpeed){
     public void TankDrive(double leftStickY, double rightStickY) {
        //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public void mecanumDrive(double LeftSpeed, double RightSpeed, double Rotation, double Gyro)
+    {
+        drive.mecanumDrive_Cartesian(LeftSpeed, RightSpeed, Rotation, Gyro);
+    }
+    
 
 }
 

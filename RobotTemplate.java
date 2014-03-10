@@ -9,10 +9,12 @@ package edu.wpi.first.wpilibj.templates;
 
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.templates.commands.CommandBase;
-import edu.wpi.first.wpilibj.templates.commands.ExampleCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.templates.commands.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,22 +26,33 @@ import edu.wpi.first.wpilibj.templates.commands.ExampleCommand;
 public class RobotTemplate extends IterativeRobot {
 
     Command autonomousCommand;
-
+    Command teleopCommand;
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
+    
+    public void robotTemplate() {
+        Watchdog.getInstance().setExpiration(5);
+
+    }
+    
     public void robotInit() {
         // instantiate the command used for the autonomous period
-        autonomousCommand = new ExampleCommand();
+        
 
         // Initialize all subsystems
         CommandBase.init();
+        teleopCommand = new JoystickDrive();
+        CommandBase.roller.Down();
+        
+        //autonomousCommand = new DriveForTime();
     }
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-        autonomousCommand.start();
+       // autonomousCommand.start();
     }
 
     /**
@@ -54,13 +67,28 @@ public class RobotTemplate extends IterativeRobot {
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        autonomousCommand.cancel();
+        //autonomousCommand.cancel();
+        Scheduler.getInstance().add(teleopCommand);
     }
 
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+        Watchdog.getInstance().feed();
         Scheduler.getInstance().run();
+    }
+    
+    public void disabledInit()
+    {
+     System.out.println("New disabled running");
+     Scheduler.getInstance().add(teleopCommand);
+     Timer.delay(0.1);
+    }
+    
+    public void disabledPeriodic()
+    {
+       Watchdog.getInstance().feed();
+       Scheduler.getInstance().run();
     }
 }

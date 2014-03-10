@@ -4,34 +4,36 @@
  * and open the template in the editor.
  */
 package edu.wpi.first.wpilibj.templates.commands;
-
-import edu.wpi.first.wpilibj.command.Command;
-
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  *
- * @author AArobotics
+ * @author Developer
  */
-public class JoystickDrive extends CommandBase {
+public class RetractCatapult extends CommandBase {
     
-    public JoystickDrive() {
-         requires(drivetrain);
-                
+    Timer timer;
+    
+    public RetractCatapult() {
+        // Use requires() here to declare subsystem dependencies
+        requires(catapult);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+        timer = new Timer();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    drivetrain.mecanumDrive(oi.LeftStickX(), oi.leftStickY(), oi.Twist(), 0);
+        catapult.fire();
+        timer.delay(0.1);
+        catapult.retract();
     }
-    
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return !catapult.isSet();
     }
 
     // Called once after isFinished returns true

@@ -23,11 +23,12 @@ public abstract class CommandBase extends Command {
     // Create a single static instance of all of your subsystems
   
    public static DriveTrain drivetrain;
-   
-   
-
-   
-   
+   public static Catapult catapult;
+   public static Roller roller;
+   public static Gyroscope gyroscope;
+   public static Distance ultrasonic;
+   public static AirCompressor compressor;
+   //public static Oculory camera;
     
     
     public static void init() {
@@ -37,6 +38,15 @@ public abstract class CommandBase extends Command {
         // yet. Thus, their requires() statements may grab null pointers. Bad
         // news. Don't move it.
         drivetrain = DriveTrain.getInstance();
+        catapult = Catapult.getInstance();
+        roller = Roller.getInstance();
+        gyroscope = Gyroscope.getInstance();
+        ultrasonic = Distance.getInstance();
+        compressor = AirCompressor.getInstance();
+        //camera = Oculory.getInstance();
+        
+        gyroscope.reset();
+        compressor.start();
         
         oi = new OI();
 

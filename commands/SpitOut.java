@@ -5,18 +5,18 @@
  */
 package edu.wpi.first.wpilibj.templates.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
-
-
 /**
  *
  * @author AArobotics
  */
-public class JoystickDrive extends CommandBase {
+public class SpitOut extends CommandBase {
     
-    public JoystickDrive() {
-         requires(drivetrain);
-                
+    public SpitOut() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+        
+        requires(roller);
+        
     }
 
     // Called just before this Command runs the first time
@@ -25,9 +25,8 @@ public class JoystickDrive extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    drivetrain.mecanumDrive(oi.LeftStickX(), oi.leftStickY(), oi.Twist(), 0);
+        roller.SpitOut();
     }
-    
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
@@ -36,10 +35,12 @@ public class JoystickDrive extends CommandBase {
 
     // Called once after isFinished returns true
     protected void end() {
+        roller.stopRoller();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+        roller.stopRoller();
     }
 }
