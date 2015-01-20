@@ -21,14 +21,14 @@ public class Oculory extends Subsystem {
     // here. Call these from Commands.
     
     public static Oculory instance;
-    //AxisCamera camera;
+    AxisCamera camera;
     Relay lightRing;
     static boolean hasRun = false;
     Servo baseServo;
     Servo camServo;
     
     //Camera constants used for distance calculation
-    final int Y_IMAGE_RES = 480;		//X Image resolution in pixels, should be 120, 240 or 480
+    final int Y_IMAGE_RES = 240;		//X Image resolution in pixels, should be 120, 240 or 480
     final double VIEW_ANGLE = 49;		//Axis M1013
     final double PI = 3.141592653;
     //Score limits used for target identification
@@ -39,7 +39,7 @@ public class Oculory extends Subsystem {
     final int  VERTICAL_SCORE_LIMIT = 50;
     final int LR_SCORE_LIMIT = 50;
     //Minimum area of particles to be considered
-    final int AREA_MINIMUM = 150;
+    final int AREA_MINIMUM = 100;//150;
     //Maximum number of particles to process
     final int MAX_PARTICLES = 8;
     CriteriaCollection cc;      // the criteria for doing the particle filter operation
@@ -74,8 +74,7 @@ public class Oculory extends Subsystem {
     
     private Oculory()
     {
-      //  camera = AxisCamera.getInstance("10.49.65.11");
-        System.out.println("Constructor\n");
+        camera = AxisCamera.getInstance("10.49.65.11");
         lightRing = new Relay(RobotMap.lightRing);
         lightRing.setDirection(Relay.Direction.kForward);
         cc = new CriteriaCollection();      // create the criteria for the particle filter
@@ -98,24 +97,24 @@ public class Oculory extends Subsystem {
 	int horizontalTargets[] = new int[MAX_PARTICLES];
 	int verticalTargetCount, horizontalTargetCount;
         
-//        try 
-  //      {
+        try 
+        {
             /**
              * Do the image capture with the camera and apply the algorithm described above. This
              * sample will either get images from the camera or from an image file stored in the top
              * level directory in the flash memory on the cRIO. The file name in this case is "testImage.jpg"
              * 
              */
-           //  ColorImage image = camera.getImage();     // comment if using stored images
+             ColorImage image = camera.getImage();     // comment if using stored images
              //ColorImage image;                           // next 2 lines read image from flash on cRIO
              //image = new RGBImage("/testImage.jpg");		// get the sample image from the cRIO flash
-//             BinaryImage thresholdImage = image.thresholdHSV(105, 137, 230, 255, 133, 183);   // keep only green objects
-             //thresholdImage.write("/threshold.bmp");
-//             BinaryImage filteredImage = thresholdImage.particleFilter(cc);           // filter out small particles
-  /*     
+             BinaryImage thresholdImage = image.thresholdHSV(105, 137, 145, 255, 80, 130);   // keep only green objects
+             BinaryImage filteredImage = thresholdImage.particleFilter(cc);           // filter out small particles
+       
              if (!hasRun)
              {
                  filteredImage.write("/filteredImage.bmp");
+                 thresholdImage.write("/threshold.bmp");
                  hasRun = true;
              }
       
@@ -221,15 +220,15 @@ public class Oculory extends Subsystem {
                  * of C data structures. Not calling free() will cause the memory to accumulate over
                  * each pass of this loop.
                  */
-//                filteredImage.free();
-//                thresholdImage.free();
-    //            image.free();
+                filteredImage.free();
+                thresholdImage.free();
+                image.free();
                 
-//            } catch (AxisCameraException ex) {        // this is needed if the camera.getImage() is called
-  //              ex.printStackTrace();
-          //  } catch (NIVisionException ex) {
-           //     ex.printStackTrace();
-            //}/*
+            } catch (AxisCameraException ex) {        // this is needed if the camera.getImage() is called
+                ex.printStackTrace();
+            } catch (NIVisionException ex) {
+                ex.printStackTrace();
+            }
         System.out.println("end getTarget\n");
         return target.Hot;
     }
@@ -360,7 +359,7 @@ public class Oculory extends Subsystem {
     
     public void setBrightness(int level)
     {
-//       camera.writeBrightness(level);
+       camera.writeBrightness(level);
     }
     
     public void setLight(boolean state)

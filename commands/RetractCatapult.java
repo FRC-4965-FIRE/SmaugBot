@@ -11,9 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
  * @author Developer
  */
 public class RetractCatapult extends CommandBase {
-    
-    Timer timer;
-    
+
     public RetractCatapult() {
         // Use requires() here to declare subsystem dependencies
         requires(catapult);
@@ -21,19 +19,16 @@ public class RetractCatapult extends CommandBase {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        timer = new Timer();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        catapult.fire();
-        timer.delay(0.1);
         catapult.retract();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return !catapult.isSet();
+        return false;
     }
 
     // Called once after isFinished returns true

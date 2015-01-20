@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.templates.commands.*;
 
@@ -33,62 +34,75 @@ public class RobotTemplate extends IterativeRobot {
      * used for any initialization code.
      */
     
-    public void robotTemplate() {
+    public void robotTemplate() 
+    {
         Watchdog.getInstance().setExpiration(5);
-
     }
     
-    public void robotInit() {
-        // instantiate the command used for the autonomous period
-        
-
+    public void robotInit() 
+    {
         // Initialize all subsystems
         CommandBase.init();
         teleopCommand = new JoystickDrive();
         CommandBase.roller.Down();
+        CommandBase.catapult.fire();
+        CommandBase.roller.Up();
         
-        //autonomousCommand = new DriveForTime();
+        autonomousCommand = new DriveForTime(1.5);
+        
+        //SmartDashboard.putData("To Distance", autonomousCommand);
     }
 
-    public void autonomousInit() {
-        // schedule the autonomous command (example)
-       // autonomousCommand.start();
+    public void autonomousInit() 
+    {
+        CommandBase.drivetrain.resetGyro();
+        Watchdog.getInstance().setEnabled(false);
+        autonomousCommand.start();
     }
 
     /**
      * This function is called periodically during autonomous
      */
-    public void autonomousPeriodic() {
+    public void autonomousPeriodic() 
+    {
         Scheduler.getInstance().run();
     }
 
-    public void teleopInit() {
-	// This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to 
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
-        //autonomousCommand.cancel();
+    public void teleopInit() 
+    {
+        CommandBase.drivetrain.resetGyro();
+        Watchdog.getInstance().setEnabled(true);
+        autonomousCommand.cancel();
         Scheduler.getInstance().add(teleopCommand);
     }
 
     /**
      * This function is called periodically during operator control
      */
-    public void teleopPeriodic() {
+    public void teleopPeriodic() 
+    {
+        CommandBase.driverLCD.clear();
+        SmartDashboard.putNumber("Gyro Value", CommandBase.drivetrain.getAngle());
+        SmartDashboard.putNumber("Distance", CommandBase.drivetrain.getDistance());
         Watchdog.getInstance().feed();
         Scheduler.getInstance().run();
     }
     
     public void disabledInit()
     {
-     System.out.println("New disabled running");
-     Scheduler.getInstance().add(teleopCommand);
-     Timer.delay(0.1);
+        System.out.println("New disabled running");
+        Scheduler.getInstance().add(teleopCommand);
+        Timer.delay(0.1);
     }
     
     public void disabledPeriodic()
     {
        Watchdog.getInstance().feed();
        Scheduler.getInstance().run();
+    }
+    
+    public void testPeriodic() 
+    {
+        LiveWindow.run();
     }
 }

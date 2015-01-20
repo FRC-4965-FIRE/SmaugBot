@@ -20,20 +20,21 @@ public class AcquireTarget extends CommandBase {
     public AcquireTarget() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-//        requires(camera);
+        requires(camera);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+        timeout.reset();
         timeout.start();
-//        camera.setBrightness(20);
-//        camera.setLight(true);
+        camera.setBrightness(0);
+        camera.setLight(true);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
         SmartDashboard.putString("Target command", "ran");
-//        targetFound = camera.getTarget();
+        targetFound = camera.getTarget();
         SmartDashboard.putBoolean("Target Found", targetFound);
     }
 
@@ -48,8 +49,8 @@ public class AcquireTarget extends CommandBase {
     // Called once after isFinished returns true
     protected void end() {
         timeout.stop();
-//        camera.setBrightness(80);
-  //      camera.setLight(false);
+        camera.setBrightness(80);
+        camera.setLight(false);
     }
 
     // Called when another command which requires one or more of the same

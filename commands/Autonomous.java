@@ -5,6 +5,7 @@
  */
 package edu.wpi.first.wpilibj.templates.commands;
 
+import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -19,17 +20,13 @@ public class Autonomous extends CommandBase {
     public boolean targetFound = false;
     
     public Autonomous() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-        
-       // requires(camera);
+        ///requires(camera);
         requires(catapult);
-        requires(ultrasonic);
-        requires(drivetrain);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+        timeout.reset();
         timeout.start();
         //camera.setBrightness(20);
         //camera.setLight(true);
@@ -39,23 +36,27 @@ public class Autonomous extends CommandBase {
     protected void execute() {
         
         while (!targetFound && timeout.get() < 2.0)
-//            targetFound = camera.getTarget();
+            // targetFound = camera.getTarget();
         
         if(targetFound)
+        {
+            CommandBase.driverLCD.println(DriverStationLCD.Line.kUser1, 0, "Target found...firing");
+            CommandBase.driverLCD.updateLCD();
+            
             catapult.fire();
+        }
         else
         {
+            CommandBase.driverLCD.println(DriverStationLCD.Line.kUser1, 0, "No target, delaying");
+            CommandBase.driverLCD.updateLCD();
+            
             waitTimer.delay(3.0);
             catapult.fire();
         }
         
-        while(ultrasonic.GetDistance() > 50)
-           drivetrain.mecanumDrive(0, .75, 0, 0);
-        
-        drivetrain.mecanumDrive(0, 0, 0, 0);
-        
         catapult.retract();
         
+        //just wait until autonomous ends and the command is canceled
         waitTimer.delay(10.0);
     }
 
@@ -66,12 +67,14 @@ public class Autonomous extends CommandBase {
 
     // Called once after isFinished returns true
     protected void end() {
-//        camera.setBrightness(80);
-     //   camera.setLight(false);
+        //camera.setBrightness(80);
+       // camera.setLight(false);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+       // camera.setBrightness(80);
+        //camera.setLight(false);
     }
 }

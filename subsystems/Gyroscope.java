@@ -20,7 +20,7 @@ public class Gyroscope extends Subsystem {
     // here. Call these from Commands.
     
     public static Gyroscope instance;
-    public boolean isEnabled = false;
+    public boolean isEnabled = true;
     Gyro gyroscope;
     
     public static Gyroscope getInstance()

@@ -62,12 +62,12 @@ public class Roller extends Subsystem {
     
     public void TakeIn()
     {
-        Roller.set(-.75);
+        Roller.set(-0.5);
     }
     
     public void SpitOut()
     {
-        Roller.set(.75);
+        Roller.set(0.5);
     }
     
     public void stopRoller()

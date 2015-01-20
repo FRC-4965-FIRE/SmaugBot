@@ -25,7 +25,7 @@ public class JoystickDrive extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    drivetrain.mecanumDrive(oi.LeftStickX(), oi.leftStickY(), oi.Twist(), 0);
+    drivetrain.ExtendedTankDrive(oi.leftStickY(), oi.rightStickY(), oi.Twist());
     }
     
 

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.templates.OI;
 import edu.wpi.first.wpilibj.templates.subsystems.*;
 import edu.wpi.first.wpilibj.templates.commands.JoystickDrive;
+import edu.wpi.first.wpilibj.DriverStationLCD;
 
 
 
@@ -25,10 +26,10 @@ public abstract class CommandBase extends Command {
    public static DriveTrain drivetrain;
    public static Catapult catapult;
    public static Roller roller;
-   public static Gyroscope gyroscope;
-   public static Distance ultrasonic;
    public static AirCompressor compressor;
-   //public static Oculory camera;
+   public static Oculory camera;
+   
+   public static DriverStationLCD driverLCD;
     
     
     public static void init() {
@@ -40,12 +41,10 @@ public abstract class CommandBase extends Command {
         drivetrain = DriveTrain.getInstance();
         catapult = Catapult.getInstance();
         roller = Roller.getInstance();
-        gyroscope = Gyroscope.getInstance();
-        ultrasonic = Distance.getInstance();
         compressor = AirCompressor.getInstance();
         //camera = Oculory.getInstance();
         
-        gyroscope.reset();
+        driverLCD = DriverStationLCD.getInstance();
         compressor.start();
         
         oi = new OI();

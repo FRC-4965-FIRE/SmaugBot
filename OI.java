@@ -37,16 +37,21 @@ public class OI {
     
     
     
+    
     public OI()
     {
-        JoyTwoFive.whenPressed(new LaunchCatapult());
+        JoyTwoFive.whileHeld(new LaunchCatapult());
         JoyTwoTwo.whileHeld(new TakeIn());
         JoyTwoThree.whileHeld(new SpitOut());
-        JoyTwoFour.whenPressed(new RollerUp());
-        JoyTwoOne.whenPressed(new RollerDown());
-        btnOne.whileHeld(new RetractCatapult());
+        JoyTwoOne.whenPressed(new RollerUp());
+        JoyTwoFour.whenPressed(new RollerDown());
+        //btnOne.whileHeld(new RetractCatapult());
         //btnSix.whenPressed(new EnableGyro());
-       
+        //btnTwo.whenPressed(new ResetGyro());
+        //btnThree.whenPressed(new TurnToAngle(0));
+        //btnFour.whenPressed(new AutoTarget());
+        //btnOne.whenPressed(new DriveToDistance(50));
+        btnOne.whenPressed(new ReverseDrive());
         
         
         
@@ -63,14 +68,14 @@ public class OI {
     }
     public double rightStickY()
     {
-        if (controller.getRawAxis(4) < 0.2 && controller.getRawAxis(4) > -0.2)
+        if (controller.getRawAxis(5) < 0.2 && controller.getRawAxis(5) > -0.2)
         {
             return 0.0;
         }
-        return controller.getRawAxis(4);
+        return controller.getRawAxis(5);
     }
     
-    public double LeftStickX()
+    public double leftStickX()
     {
         if (controller.getX() < 0.2 && controller.getX() > -0.2)
         {
@@ -81,7 +86,7 @@ public class OI {
     
     public double Twist()
     {
-        if (controller.getRawAxis(3) < 0.1 && controller.getRawAxis(3) > -0.1)
+        if (controller.getRawAxis(3) < 0.3 && controller.getRawAxis(3) > -0.3)
         {
             return 0.0;
         }

@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.Timer;
 
-
 /**
  *
  * @author AArobotics
@@ -20,29 +19,28 @@ import edu.wpi.first.wpilibj.Timer;
 public class Catapult extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    
+
     public static Catapult instance;
-    Solenoid Launch;
-    Solenoid Lock;
-    DigitalInput Limit;
-    Victor Retract;
+    Solenoid LeftLaunch;
+    Solenoid RightLaunch;
+    Solenoid LeftRetract;
+    Solenoid RightRetract;
     Timer failSafe;
     double fireLimit = 3.0;
-   
-    public static Catapult getInstance()
-    {
-        if(instance == null)
-           instance = new Catapult();
-           
+
+    public static Catapult getInstance() {
+        if (instance == null) {
+            instance = new Catapult();
+        }
+
         return instance;
     }
-    
-    private Catapult()
-    {
-        Launch = new Solenoid(RobotMap.CatapultRelease);
-        Lock = new Solenoid(RobotMap.CatapultEngage);
-        Retract = new Victor(RobotMap.Retract);
-        Limit = new DigitalInput(RobotMap.Limit);
+
+    private Catapult() {
+        LeftLaunch = new Solenoid(RobotMap.LeftLaunch);
+        RightLaunch = new Solenoid(RobotMap.RightLaunch);
+        LeftRetract = new Solenoid(RobotMap.LeftRetract);
+        RightRetract = new Solenoid(RobotMap.RightRetract);
         failSafe = new Timer();
     }
 
@@ -50,43 +48,27 @@ public class Catapult extends Subsystem {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
     }
-    
-    public void fire()
-    {
-        Lock.set(false);
-        Launch.set(true);
+
+    public void fire() {
+        LeftRetract.set(false);
+        RightRetract.set(false);
+        LeftLaunch.set(true);
+        RightLaunch.set(true);
     }
-    
-    public void retract()
-    {
-      Launch.set(false);
-      Lock.set(true);
-      failSafe.reset();
-      failSafe.start();
-      
-      while(isSet() && failSafe.get() < fireLimit)
-      {
-         Retract.set(0.30);
-         Timer.delay(0.05);
-      }
-      
-      Retract.set(0);
-      failSafe.stop();
-              
+
+    public void retract() {
+        LeftLaunch.set(false);
+        RightLaunch.set(false);
+        LeftRetract.set(true);
+        RightRetract.set(true);
     }
-          
-    
-    public void stopRetract()
-    {
-         Retract.set(0);
-    }
-    
-    public boolean isSet()
-    {
-        if (Limit.get() == false)
-            return true;    
-        
+
+    public boolean isSet() {
+        if (LeftLaunch.get() == false && RightLaunch.get() == false) {
+            return true;
+        }
+
         return false;
     }
-    
+
 }
